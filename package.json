@@ -1,0 +1,20 @@
+{
+  "name": "normal-day",
+  "version": "1.0.0",
+  "description": "normal day Public Database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "vercel dev --listen 80"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "node-fetch": "^2.7.0",
+    "path": "^0.12.7"
+  }
+}

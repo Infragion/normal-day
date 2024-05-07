@@ -1,2 +1,7 @@
-.vercel/
-node-modules/
+*
+!*.json
+!.gitignore
+
+!api/
+!api/*/
+!api/*/*

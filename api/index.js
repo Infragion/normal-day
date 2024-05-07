@@ -1,5 +1,7 @@
 const express = require("express");
-const nodefetch = require("node-fetch");
+// const nodefetch = require("node-fetch");
+const { gzip } = require("zlib");
+const bcrypt = require("bcrypt");
 const axios = require("axios");
 const path = require("path");
 const cors = require("cors");
@@ -469,6 +471,26 @@ app.get("/", async (req, res) => {
   }
 })
 
+const credentials = {
+  user: "admin",
+  password: "admin"
+}
+
+app.get("/admin", async (req, res) => {
+  const user = req.query.username;
+  const password = req.query.password;
+  bcrypt.compare(password, await bcrypt.hash("admin", 10), function(err, result) {
+    if (err) { throw (err); }
+    if (user === credentials.user){
+      res.json({code: 0, message: "Password matches the input"})
+    }
+    else{
+      res.json({code: 1, message: "Password doesn't match"})
+    }
+  });
+  // res.json({user: user, password: await bcrypt.hash(password, 10)})
+})
+
 app.listen(1337, () => console.log("Server ready on port 1337."));
 
-module.exports = app;
+//module.exports = app;

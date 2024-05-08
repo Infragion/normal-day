@@ -474,32 +474,32 @@ app.get("/admin/clear", async (req, res) => {
   res.json({code: 0, message: 'Success!'})
 });
 
-// app.get("/admin", async (req, res) => {
-//   const User = req.query.username
-//   // const Password = req.query.password
-//   // await kv.set(`${User}`, `${Password}`);
-//   // res.send(`<h1>Success! ${await kv.get(User)}</h1>`)
-//   // if(req.cookies.username == null){
-//   //   var hour = 3600000;
-//   if (req.cookies.username === undefined){
-//     var hour = 3600000;
-//     // req.session.cookie.maxAge = 120; //2 weeks
-//     res.cookie('username', `${User}`, {
-//       maxAge: 3600 * 24,
-//       secure: true,
-//     });
-//     console.log(req.cookies.username);
-//     res.json({message: 'cookie'})
-//   }
-//   else{
-//     res.json(`${await kv.get(req.cookies.username)}`); 
-//   }
-//   // req.session.username.maxAge = 60; //2 weeks
-//   // }
-//   // else{
-//   //   res.json(`${await kv.get(req.cookies.username)}`);
-//   // }
-// })
+app.get("/admin", async (req, res) => {
+  const User = req.query.username
+  // const Password = req.query.password
+  // await kv.set(`${User}`, `${Password}`);
+  // res.send(`<h1>Success! ${await kv.get(User)}</h1>`)
+  // if(req.cookies.username == null){
+  //   var hour = 3600000;
+  if (req.cookies.username === undefined){
+    var hour = 3600000;
+    // req.session.cookie.maxAge = 120; //2 weeks
+    res.cookie('username', `${User}`, {
+      maxAge: 3600 * 24,
+      secure: true,
+    });
+    console.log(req.cookies.username);
+    res.json({message: 'cookie'})
+  }
+  else{
+    res.json(`${await kv.get(req.cookies.username)}`); 
+  }
+  // req.session.username.maxAge = 60; //2 weeks
+  // }
+  // else{
+  //   res.json(`${await kv.get(req.cookies.username)}`);
+  // }
+})
 
 app.listen(1337, () => console.log("Server ready on port 1337."));
 

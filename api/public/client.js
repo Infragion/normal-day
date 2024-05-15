@@ -28,35 +28,35 @@ async function username_to_userid(username) {
   return userId;
 }
 
-async function IsUsernameExists(User){
-  const response = await fetch(
-    `https://auth.roblox.com/v1/usernames/validate?request.username=${User}&request.birthday=1337-04-20`,
-    {
-      method: 'GET',
-      mode: 'no-cors',
-    },
-  );
+// async function IsUsernameExists(User){
+//   const response = await fetch(
+//     `https://auth.roblox.com/v1/usernames/validate?request.username=${User}&request.birthday=1337-04-20`,
+//     {
+//       method: 'GET',
+//       mode: 'no-cors',
+//     },
+//   );
 
-  const json = await response.json();
-  const code = json.code;
+//   const json = await response.json();
+//   const code = json.code;
 
-  if (code === 1){
-    return true;
-  }
-  if (code === 0){
-    return false;
-  }
-}
+//   if (code === 1){
+//     return true;
+//   }
+//   if (code === 0){
+//     return false;
+//   }
+// }
 
 
-async function IsUserBanned(User){
-  await fetch(`https://www.roblox.com/users/profile?username=${await username_to_userid(User)}`).then((response) => {
-    if (response.ok) {
-      return false;
-    }
-    return true;
-  })
-}
+// async function IsUserBanned(User){
+//   await fetch(`https://www.roblox.com/users/profile?username=${await username_to_userid(User)}`).then((response) => {
+//     if (response.ok) {
+//       return false;
+//     }
+//     return true;
+//   })
+// }
 
 // our default array of dreams
 const dreams = [];
@@ -87,14 +87,14 @@ const appendNewDream = async function(User) {
     // res.json({ error: '400: Bad Request' })
     Error = true;
   }
-  if (User !== undefined && await IsUsernameExists(User) === false){
-    // res.json({ error: '400: Bad Request' })
-    Error = true;
-  }
-  if (User !== undefined && await IsUserBanned(User) === true){
-    // res.json({ error: '400: Bad Request' })
-    Error = true;
-  }
+  // if (User !== undefined && await IsUsernameExists(User) === false){
+  //   // res.json({ error: '400: Bad Request' })
+  //   Error = true;
+  // }
+  // if (User !== undefined && await IsUserBanned(User) === true){
+  //   // res.json({ error: '400: Bad Request' })
+  //   Error = true;
+  // }
   const regex3 = /_/g; // Regex pattern to match underscores globally
   const underscoresCount = (User.match(regex3) || []).length; // Count underscores in the string
 

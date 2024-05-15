@@ -48,6 +48,34 @@ async function IsUsernameExists(User){
   }
 }
 
+async function username_to_userid(username) {
+  const rawResponse = await fetch('https://users.roblox.com/v1/usernames/users', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({"usernames": [username], "excludeBannedUsers": true})
+  });
+  const content = await rawResponse.json();
+  console.log(content.data[0].id)
+  return content.data[0].id
+}
+
+async function IsUserBanned(User){
+  const response = await fetch(`https://www.roblox.com/users/profile?username=${name}`)
+            .then(r => {
+                // check to see if URL is invalid.
+                if (!r.ok) { return false }
+                // return the only digits in the URL "the User ID"
+                return r.url.match(/\d+/)[0];
+            })
+            .then(id =>{
+                // this is where you get your ID
+                return true
+            })
+}
+
 // our default array of dreams
 const dreams = [];
 
@@ -78,6 +106,10 @@ const appendNewDream = async function(User) {
     Error = true;
   }
   if (User !== undefined && await IsUsernameExists(User) === false){
+    // res.json({ error: '400: Bad Request' })
+    Error = true;
+  }
+  if (User !== undefined && await IsUserBanned(User) === true){
     // res.json({ error: '400: Bad Request' })
     Error = true;
   }

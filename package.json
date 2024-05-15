@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "vercel dev --listen 80",
-    "build": "npm install & npm install @vercel/kv"
+    "start": "vercel dev --listen 80"
   },
   "keywords": [],
   "author": "",

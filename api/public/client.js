@@ -109,10 +109,6 @@ const appendNewDream = async function(User) {
     // res.json({ error: '400: Bad Request' })
     Error = true;
   }
-  if (User !== undefined && await IsUserBanned(User) === true){
-    // res.json({ error: '400: Bad Request' })
-    Error = true;
-  }
   const regex3 = /_/g; // Regex pattern to match underscores globally
   const underscoresCount = (User.match(regex3) || []).length; // Count underscores in the string
 

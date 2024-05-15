@@ -37,8 +37,8 @@ async function IsUsernameExists(User){
     }
   );
 
-  const json = await response.json()
-  const code = json.code
+  const json = await response.json();
+  const code = json.code;
 
   if (code === 1){
     return true;
@@ -66,13 +66,13 @@ async function IsUserBanned(User){
   const response = await fetch(`https://www.roblox.com/users/profile?username=${name}`)
             .then(r => {
                 // check to see if URL is invalid.
-                if (!r.ok) { return false }
+                if (!r.ok) { return false; }
                 // return the only digits in the URL "the User ID"
                 return r.url.match(/\d+/)[0];
             })
             .then(id =>{
                 // this is where you get your ID
-                return true
+                return true;
             })
 }
 

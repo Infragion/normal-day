@@ -28,6 +28,25 @@ async function username_to_userid(username) {
   return userId;
 }
 
+async function IsUsernameExists(User){
+  const response = await fetch(
+    `https://auth.roblox.com/v1/usernames/validate?request.username=${User}&request.birthday=1337-04-20`,
+    {
+      method: 'GET',
+      mode: 'no-cors'
+    }
+  );
+
+  const json = await response.json()
+  const code = json.code
+
+  if (code === 1){
+    return true;
+  }
+  if (code === 0){
+    return false;
+  }
+}
 
 // our default array of dreams
 const dreams = [];
@@ -55,6 +74,10 @@ const appendNewDream = async function(User) {
   }
   
   if (User !== undefined && User.charAt(0) === '_'){
+    // res.json({ error: '400: Bad Request' })
+    Error = true;
+  }
+  if (User !== undefined && await IsUsernameExists(User) === false){
     // res.json({ error: '400: Bad Request' })
     Error = true;
   }

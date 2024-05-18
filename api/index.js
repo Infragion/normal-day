@@ -501,6 +501,10 @@ app.get("/admin", async (req, res) => {
   // }
 })
 
+app.get("/profile/Infragion", async (req, res) => {
+  res.sendFile(__dirname + "/views/infragion.html")
+})
+
 app.listen(1337, () => console.log("Server ready on port 1337."));
 
 module.exports = app;

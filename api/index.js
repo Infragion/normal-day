@@ -146,6 +146,10 @@ async function IsUsernameExists(User){
   }
 }
 
+app.get("/db/:user", async (req, res) => {
+  const user = req.params['user']
+  await kv.get(`${user}:cash`);
+})
 
 app.get("/", async (req, res) => {
   var User = req.query.username;

@@ -197,7 +197,7 @@ async function hash (string) {
 }
 
 async function compare(string, hash) {
-
+  console.log("compare", {string, hash})
   const [salt, key] = hash.split(':')
   const hashedBuffer = scryptSync(string, salt, 32);
 
@@ -299,9 +299,17 @@ app.post('/db/upd', async (req, res) => {
 
 app.post('/api/login', async (req, res) => {
   try {
-    const username = req.query.username;
-    const password = req.query.password;
-    const identify = await compare(password, await kv.get(`${username}:user`))
+    const body = JSON.parse(req.body)
+    const username = body.username;
+    const password = body.password;
+    console.log(req.body)
+    console.log(username, password)
+    console.log("point 1")
+    const temp = await kv.get(`${username}:user`);
+    console.log("point 2")
+    const identify = await compare(password, temp)
+    console.log("point 3")
+
     if (identify === true) {
       res.json( { identified: await compare(password, await kv.get(`${username}:user`)), hash: await kv.get(`${username}:user`) } )
     }

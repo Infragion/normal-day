@@ -51,7 +51,7 @@ document.getElementById('login').addEventListener('click', async function() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username: username, password: password })
     });
     const json = await res.json()
     if (typeof(json.hash) === 'string' && json.identified === true) {

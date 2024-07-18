@@ -1,13 +1,16 @@
 const express = require("express");
 const nodefetch = require("node-fetch");
+const cookieParser = require('cookie-parser');
 const { kv } =  require('@vercel/kv');
 const axios = require("axios");
+const { scryptSync, randomBytes, timingSafeEqual } = require('crypto');
 const path = require("path");
 const cors = require("cors");
 
 const app = express();
 
 app.use('/', express.static(path.join(__dirname, 'public')))
+app.use(cookieParser());
 app.use(cors());
 
 const EarlyAccessPlayers = [1359183163, 3343655985, 1165987937, 1329269335]
@@ -145,6 +148,174 @@ async function IsUsernameExists(User){
     return false;
   }
 }
+
+app.get("/db", async (req, res) => {
+  if (req.headers.cookie === undefined){
+    res.redirect("/login"); return 0;
+  }
+  const raw = req.headers.cookie.split('_');
+  const username = raw[0].toString()
+  const hash = raw[1].toString()
+  if (hash === await kv.get(`${username}:user`)) {
+    const keys = await kv.keys("*")
+    let code = "<head> <script src='/db_client.js'></script> </head> <input id='sinput' style='position: absolute; top: 1%; right: 6%;' placeholder='Username' type='text'> <button id='search' style='position: absolute; top: 1%; right: 1%;'>Search</button>"
+    for (var key in keys) {
+      if (keys.hasOwnProperty(key)) {
+        const cashid = keys[key].substring(0, keys[key].length - 5)+'_cash'
+        code = code + `
+        <div id='${keys[key].substring(0, keys[key].length - 5)+'_div'}' style="margin-bottom: 10px;">
+          <input type='text' disabled="true" id='${keys[key].substring(0, keys[key].length - 5)}' value='${keys[key]}'>
+          <input type='text' id='${keys[key].substring(0, keys[key].length - 5)+'_cash'}' value='${await kv.get(keys[key])}'>
+          <button onclick='DB_upd("${keys[key]}", "${keys[key].substring(0, keys[key].length - 5)+'_cash'}")' id='${keys[key].substring(0, keys[key].length - 5)+'_upd'}'>Update</button>
+          <button onclick='fetch("/db/del?key=${keys[key]}", {method: "POST"}); document.getElementById("${keys[key].substring(0, keys[key].length - 5)+'_div'}").remove()' id='${keys[key].substring(0, keys[key].length - 5)+'_del'}' style="background-color: red;">Delete</button>
+        </div>
+        `
+      }
+    }
+    res.send(code)
+  }
+  else{
+    res.redirect("/login");
+  }
+})
+
+async function hash (string) {
+  const salt = randomBytes(16).toString('hex');
+  const hashedString = scryptSync(string, salt, 32).toString('hex');
+  const shashedString = `${salt}:${hashedString}`;
+
+  return shashedString;
+
+  // const hash = await new Promise((resolve, reject) => {
+  //   bcrypt.hash(password, saltRounds, function(err, hash) {
+  //     if (err) reject(err)
+  //     resolve(hash)
+  //   });
+  // })
+
+  // return hash
+}
+
+async function compare(string, hash) {
+
+  const [salt, key] = hash.split(':')
+  const hashedBuffer = scryptSync(string, salt, 32);
+
+  const keyBuffer = Buffer.from(key, 'hex');
+  const match = timingSafeEqual(hashedBuffer, keyBuffer);
+  return match;
+  
+  // const compare = await new Promise((resolve, reject) => {
+  //   bcrypt.compare(string, hash, function(err, sigma) {
+  //     if (err) reject(err)
+  //     resolve(sigma)
+  //   });
+  // })
+
+  // return compare
+}
+
+app.get('/login', async (req, res) => {
+  // console.log(await hash("RoosterArrowMistral"))
+  // console.log(await compare("test", await kv.get("admin:user")))
+  if (req.headers.cookie === undefined){res.send(`
+  <head>
+    <script defer src="/db_client.js"></script>
+  </head>
+  <body>
+    <div style=" position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+      <p style="position: fixed; bottom: 100%; text-align: center; ">Login to view and edit database</p>
+      <input id="username" style="position: relative; bottom: 5px;" placeholder="Username">
+      <br>
+      <input id="password" placeholder="Password">
+      <br>
+      <button id='login' style="width: 125px; position: relative; left: 25px; top: 5px">Login</button>
+    </div>
+  </body>
+  `); return 0;}
+  const raw = req.headers.cookie.split('_');
+  const username = raw[0].toString()
+  const hash = raw[1].toString()
+  // const { salt, hash } = shash.split(':');
+  if (hash === await kv.get(`${username}:user`)) {
+    res.redirect("/db");
+  }
+  else{
+    res.send(`
+  <head>
+    <script defer src="/db_client.js"></script>
+  </head>
+  <body>
+    <div style=" position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+      <p style="position: fixed; bottom: 100%; text-align: center; ">Login to view and edit database</p>
+      <input id="username" style="position: relative; bottom: 5px;" placeholder="Username">
+      <br>
+      <input id="password" placeholder="Password">
+      <br>
+      <button id='login' style="width: 125px; position: relative; left: 25px; top: 5px">Login</button>
+    </div>
+  </body>
+  `)
+  }
+});
+
+app.get('/db/del', async (req, res) => {
+  res.json( {error: 401, message: "Unathorized"});
+});
+
+app.post('/db/del', async (req, res) => {
+  try {
+    const key = req.query.key;
+    await kv.del(key);
+  }
+
+  catch (error) {
+    res.send(error);
+  }
+
+  finally {
+    res.send("Success");
+  }
+});
+
+app.get('/db/upd', async (req, res) => {
+  res.json( {error: 401, message: "Unathorized"});
+});
+
+app.post('/db/upd', async (req, res) => {
+  try {
+    const key = req.query.key;
+    const val = req.query.value;
+    
+    await kv.set(key, val);
+  }
+  catch (error) {
+    res.send(error);
+  }
+  finally {
+    res.send("Success");
+  }
+});
+
+app.post('/api/login', async (req, res) => {
+  try {
+    const username = req.query.username;
+    const password = req.query.password;
+    const identify = await compare(password, await kv.get(`${username}:user`))
+    if (identify === true) {
+      res.json( { identified: await compare(password, await kv.get(`${username}:user`)), hash: await kv.get(`${username}:user`) } )
+    }
+    if (identify === false) {
+      res.json( { identified: await compare(password, await kv.get(`${username}:user`)) } )
+    }
+  }
+  catch (error) {
+    console.log(error);
+  }
+  finally {
+    console.log("Success");
+  }
+});
 
 app.get("/db/:name", async (req, res) => {
   const user = req.params.name

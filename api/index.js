@@ -11,6 +11,7 @@ const app = express();
 
 app.use('/', express.static(path.join(__dirname, 'public')))
 app.use(cookieParser());
+app.use(express.json())
 app.use(cors());
 
 const EarlyAccessPlayers = [1359183163, 3343655985, 1165987937, 1329269335]

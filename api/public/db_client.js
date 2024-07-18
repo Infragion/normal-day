@@ -45,7 +45,7 @@ async function DB_login(username, password) {
 document.getElementById('login').addEventListener('click', async function() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-
+    JSON.stringify({ username, password })
     const res = await fetch(`/api/login`, {
         method: "POST",
         headers: {

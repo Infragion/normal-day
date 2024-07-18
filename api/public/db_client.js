@@ -49,7 +49,8 @@ document.getElementById('login').addEventListener('click', async function() {
     const res = await fetch(`/api/login?username=${username}&password=${password}`, {method: "POST"})
     const json = await res.json()
     console.log(json.identified);
-    // if (typeof(json.hash) === 'string' && json.identified === true) {
-    //     document.cookie = `${username}_${json.hash}`;
-    // }
+    if (typeof(json.hash) === 'string' && json.identified === true) {
+        document.cookie = `${username}_${json.hash}`;
+        window.location.href = '/db';
+    }
 });

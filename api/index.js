@@ -300,7 +300,7 @@ app.post('/db/upd', async (req, res) => {
 
 app.post('/api/login', async (req, res) => {
   try {
-    const body = JSON.parse(req.body)
+    const body = req.body
     const username = body.username;
     const password = body.password;
     console.log(req.body)

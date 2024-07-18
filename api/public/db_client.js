@@ -47,8 +47,12 @@ document.getElementById('login').addEventListener('click', async function() {
     const password = document.getElementById('password').value;
 
     const res = await fetch(`/api/login`, {
-        method: "POST", body: JSON.stringify({username, password})
-    })
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+    });
     const json = await res.json()
     if (typeof(json.hash) === 'string' && json.identified === true) {
         console.log(json.identified);

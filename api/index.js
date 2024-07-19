@@ -221,6 +221,9 @@ app.get('/login', async (req, res) => {
   // console.log(await compare("test", await kv.get("admin:user")))
   if (req.headers.cookie === undefined){res.status(200).send(`
   <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&amp;display=swap" rel="stylesheet">
     <script defer src="/db_client.js"></script>
     <link rel="stylesheet" href="/login_style.css" type="text/css">
   </head>
@@ -245,6 +248,9 @@ app.get('/login', async (req, res) => {
   else{
     res.status(200).send(`
   <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&amp;display=swap" rel="stylesheet">
     <script defer src="/db_client.js"></script>
     <link rel="stylesheet" href="/login_style.css" type="text/css">
   </head>

@@ -9,7 +9,7 @@ const cors = require("cors");
 
 const app = express();
 
-app.use('/', express.static(path.join(__dirname, 'public')))
+app.use('/', express.static('api/public'))
 app.use(cookieParser());
 // app.use(express.json())
 app.use(cors());
@@ -222,15 +222,16 @@ app.get('/login', async (req, res) => {
   if (req.headers.cookie === undefined){res.status(200).send(`
   <head>
     <script defer src="/db_client.js"></script>
+    <link rel="stylesheet" href="/login_style.css" />
   </head>
   <body>
-    <div style=" position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-      <p style="position: fixed; bottom: 100%; text-align: center; ">Login to view and edit database</p>
-      <input id="username" style="position: relative; bottom: 5px;" placeholder="Username">
+    <div>
+      <p>Login to view my sigma shit</p>
+      <input id="username" placeholder="Username">
       <br>
       <input id="password" placeholder="Password">
       <br>
-      <button id='login' style="width: 125px; position: relative; left: 25px; top: 5px">Login</button>
+      <button id='login'>Login</button>
     </div>
   </body>
   `); return 0;}
@@ -245,15 +246,16 @@ app.get('/login', async (req, res) => {
     res.status(200).send(`
   <head>
     <script defer src="/db_client.js"></script>
+    <link rel="stylesheet" href="/login_style.css" />
   </head>
   <body>
-    <div style=" position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-      <p style="position: fixed; bottom: 100%; text-align: center; ">Login to view and edit database</p>
-      <input id="username" style="position: relative; bottom: 5px;" placeholder="Username">
+    <div id="loginContainer">
+      <p>Login to view my sigma shit</p>
+      <input id="username" placeholder="Username">
       <br>
       <input id="password" placeholder="Password">
       <br>
-      <button id='login' style="width: 125px; position: relative; left: 25px; top: 5px">Login</button>
+      <button id='login'>Login</button>
     </div>
   </body>
   `)
@@ -274,6 +276,7 @@ app.get('/db/del', async (req, res) => {
 });
 
 app.post('/db/del', async (req, res) => {
+  if (req.headers.cookie === undefined) {res.status(401).json( {error: 401, message: "Unathorized"}); return 0}
   const raw = req.headers.cookie.split('_');
   const username = raw[0].toString()
   const hash = raw[1].toString()
@@ -314,6 +317,7 @@ app.get('/db/upd', async (req, res) => {
 });
 
 app.post('/db/upd', async (req, res) => {
+  if (req.headers.cookie === undefined) {res.status(401).json( {error: 401, message: "Unathorized"}); return 0}
   const raw = req.headers.cookie.split('_');
   const username = raw[0].toString()
   const hash = raw[1].toString()

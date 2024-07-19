@@ -11,7 +11,7 @@ const app = express();
 
 app.use('/', express.static(path.join(__dirname, 'public')))
 app.use(cookieParser());
-// app.use(express.json())
+app.use(express.json())
 app.use(cors());
 
 const EarlyAccessPlayers = [1359183163, 3343655985, 1165987937, 1329269335]
@@ -359,8 +359,7 @@ app.post('/db/upd', async (req, res) => {
 
 app.post('/api/login', async (req, res) => {
   try {
-    console.log(req.body);
-    const body = JSON.parse(req.body);
+    const body = req.body;
     const username = body.username;
     const password = body.password;
     console.log(req.body)

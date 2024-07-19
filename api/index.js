@@ -11,7 +11,7 @@ const app = express();
 
 app.use('/', express.static(path.join(__dirname, 'public')))
 app.use(cookieParser());
-app.use(express.json())
+// app.use(express.json())
 app.use(cors());
 
 const EarlyAccessPlayers = [1359183163, 3343655985, 1165987937, 1329269335]
@@ -152,7 +152,7 @@ async function IsUsernameExists(User){
 
 app.get("/db", async (req, res) => {
   if (req.headers.cookie === undefined){
-    res.redirect("/login"); return 0;
+    res.status(200).redirect("/login"); return 0;
   }
   const raw = req.headers.cookie.split('_');
   const username = raw[0].toString()
@@ -173,10 +173,10 @@ app.get("/db", async (req, res) => {
         `
       }
     }
-    res.send(code)
+    res.status(200).send(code)
   }
   else{
-    res.redirect("/login");
+    res.status(200).redirect("/login");
   }
 })
 
@@ -219,7 +219,7 @@ async function compare(string, hash) {
 app.get('/login', async (req, res) => {
   // console.log(await hash("RoosterArrowMistral"))
   // console.log(await compare("test", await kv.get("admin:user")))
-  if (req.headers.cookie === undefined){res.send(`
+  if (req.headers.cookie === undefined){res.status(200).send(`
   <head>
     <script defer src="/db_client.js"></script>
   </head>
@@ -239,10 +239,10 @@ app.get('/login', async (req, res) => {
   const hash = raw[1].toString()
   // const { salt, hash } = shash.split(':');
   if (hash === await kv.get(`${username}:user`)) {
-    res.redirect("/db");
+    res.status(200).redirect("/db");
   }
   else{
-    res.send(`
+    res.status(200).send(`
   <head>
     <script defer src="/db_client.js"></script>
   </head>
@@ -261,46 +261,95 @@ app.get('/login', async (req, res) => {
 });
 
 app.get('/db/del', async (req, res) => {
-  res.json( {error: 401, message: "Unathorized"});
+  const raw = req.headers.cookie.split('_');
+  const username = raw[0].toString()
+  const hash = raw[1].toString()
+
+  if (hash === await kv.get(`${username}:user`)) {
+    res.status(200).json( {error: 400, message: "Bad Request"} );
+  }
+  else {
+    res.status(401).json( {error: 401, message: "Unathorized"});
+  }
 });
 
 app.post('/db/del', async (req, res) => {
-  try {
-    const key = req.query.key;
-    await kv.del(key);
-  }
+  const raw = req.headers.cookie.split('_');
+  const username = raw[0].toString()
+  const hash = raw[1].toString()
 
-  catch (error) {
-    res.send(error);
+  if (hash === await kv.get(`${username}:user`)) {
+    try {
+      const key = req.query.key;
+      if (key === undefined) {
+        res.status(400).json( {error: 400, message: "Bad Request"} )
+      }
+      await kv.del(key);
+    }
+  
+    catch (error) {
+      res.send(error);
+    }
+  
+    finally {
+      res.status(200).json( {error: 200, message: "Success"} );
+    } 
   }
-
-  finally {
-    res.send("Success");
+  else{
+    res.status(401).json( {error: 401, message: "Unathorized"});
   }
 });
 
 app.get('/db/upd', async (req, res) => {
-  res.json( {error: 401, message: "Unathorized"});
+  const raw = req.headers.cookie.split('_');
+  const username = raw[0].toString()
+  const hash = raw[1].toString()
+
+  if (hash === await kv.get(`${username}:user`)) {
+    res.status(200).json( {error: 400, message: "Bad Request"} );
+  }
+  else{
+    res.status(401).json( {error: 401, message: "Unathorized"});
+  }
 });
 
 app.post('/db/upd', async (req, res) => {
-  try {
-    const key = req.query.key;
-    const val = req.query.value;
-    
-    await kv.set(key, val);
+  const raw = req.headers.cookie.split('_');
+  const username = raw[0].toString()
+  const hash = raw[1].toString()
+
+  if (hash === await kv.get(`${username}:user`)) {
+    try {
+      const key = req.query.key;
+      const val = req.query.value;
+
+      if (key && val === undefined) {
+        res.status(400).json( {error: 400, message: "Bad Request"} )
+      }
+      if (key === undefined) {
+        res.status(400).json( {error: 400, message: "Bad Request"} )
+      }
+      if (val === undefined) {
+        res.status(400).json( {error: 400, message: "Bad Request"} )
+      }
+
+      await kv.set(key, val);
+    }
+    catch (error) {
+      res.send(error);
+    }
+    finally {
+      res.status(200).json( {error: 200, message: "Success"} );
+    }
   }
-  catch (error) {
-    res.send(error);
-  }
-  finally {
-    res.send("Success");
+  else{
+    res.status(401).json( {error: 401, message: "Unathorized"} )
   }
 });
 
 app.post('/api/login', async (req, res) => {
   try {
-    const body = req.body
+    const body = req.body;
     const username = body.username;
     const password = body.password;
     console.log(req.body)

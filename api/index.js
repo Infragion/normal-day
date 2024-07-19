@@ -9,7 +9,7 @@ const cors = require("cors");
 
 const app = express();
 
-app.use('/', express.static('api/public'))
+app.use('/', express.static(path.join(__dirname, 'public')))
 app.use(cookieParser());
 // app.use(express.json())
 app.use(cors());
@@ -222,7 +222,7 @@ app.get('/login', async (req, res) => {
   if (req.headers.cookie === undefined){res.status(200).send(`
   <head>
     <script defer src="/db_client.js"></script>
-    <link rel="stylesheet" href="/login_style.css" />
+    <link rel="stylesheet" href="/login_style.css" type="text/css">
   </head>
   <body>
     <div>
@@ -246,7 +246,7 @@ app.get('/login', async (req, res) => {
     res.status(200).send(`
   <head>
     <script defer src="/db_client.js"></script>
-    <link rel="stylesheet" href="/login_style.css" />
+    <link rel="stylesheet" href="/login_style.css" type="text/css">
   </head>
   <body>
     <div id="loginContainer">

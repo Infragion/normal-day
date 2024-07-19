@@ -228,8 +228,8 @@ app.get('/login', async (req, res) => {
     <link rel="stylesheet" href="/login_style.css" type="text/css">
   </head>
   <body>
-    <div>
-      <p>Login to view my sigma shit</p>
+    <div class="container">
+      <p>Login</p>
       <input id="username" placeholder="Username">
       <br>
       <input id="password" placeholder="Password">
@@ -255,8 +255,8 @@ app.get('/login', async (req, res) => {
     <link rel="stylesheet" href="/login_style.css" type="text/css">
   </head>
   <body>
-    <div id="loginContainer">
-      <p>Login to view my sigma shit</p>
+    <div class="container">
+      <p>Login</p>
       <input id="username" placeholder="Username">
       <br>
       <input id="password" placeholder="Password">

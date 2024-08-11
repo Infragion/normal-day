@@ -75,10 +75,15 @@ async function IsAlpha(UserId){
 
 async function SpacingNeeded(userid){
   const is = await IsEarlyAccess(userid)
-  if (is && IsAlpha(userid) == '') {
-    return 'none'
+  if (is) {
+    if (IsAlpha(userid) == 'Alpha'){
+     return 'none' 
+    }
+      else {
+    return 'block'
   }
-  else{
+  }
+    else {
     return 'block'
   }
 }

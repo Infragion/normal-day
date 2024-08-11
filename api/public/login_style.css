@@ -1,5 +1,9 @@
+
+
 html, body {
-    font-family: "Comfortaa", sans-serif;
+    background-color: 141619;
+    color: white;
+    font-family: "Roboto", sans-serif;
     font-weight: 500;
     
     display: flex;
@@ -16,7 +20,8 @@ html, body {
   flex-direction: column
 }
 button, input  {
-  font-family: "Comfortaa", sans-serif;
+  font-family: "Roboto", sans-serif;
+  color: white;
   font-weight: 500;
   width: 80%;
   margin:-5px 0;
@@ -24,13 +29,23 @@ button, input  {
   border-radius: 5px;
 }
 input {
-    border: #979797 solid 1px;
+    background-color: #212429;
+    border: none;
     padding: 5px;
 }
 
-button {
-    border: rgb(31 31 31) solid 2px;
-    outline: black solid 1px;
-    background-color: rgb(21, 21, 21);
+textarea:focus, input:focus{
+    outline: none;
+}
+
+button{
+    background-color: #4A6FA5;
     color: white;
+    border: none;
+    font-weight: 600;
+}
+button:hover {
+    background-color: transparent;
+    border: 2px solid #4A6FA5;
+    color: #4A6FA5;
 }

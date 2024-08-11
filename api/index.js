@@ -52,16 +52,6 @@ async function Data(userid, datastore) {
   }
 }
 
-async function SpacingNeeded(userid){
-  const is = await IsEarlyAccess(userid)
-  if (is && IsAlpha(userid) == '') {
-    return 'none'
-  }
-  else{
-    return 'block'
-  }
-}
-
 async function IsAlpha(UserId){
   const URL = `https://inventory.roblox.com/v1/users/${UserId}/items/1/662706674/is-owned`;
   const response = await fetch(URL);
@@ -80,6 +70,16 @@ async function IsAlpha(UserId){
     else{
       return '';
     }
+  }
+}
+
+async function SpacingNeeded(userid){
+  const is = await IsEarlyAccess(userid)
+  if (is && IsAlpha(userid) == '') {
+    return 'none'
+  }
+  else{
+    return 'block'
   }
 }
 

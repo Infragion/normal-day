@@ -52,9 +52,9 @@ async function Data(userid, datastore) {
   }
 }
 
-async function SpacingNeeded(username){
-  const is = await IsEarlyAccess(username)
-  if (is) {
+async function SpacingNeeded(userid){
+  const is = await IsEarlyAccess(userid)
+  if (is && IsAlpha(userid) == '') {
     return 'none'
   }
   else{

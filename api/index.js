@@ -52,6 +52,16 @@ async function Data(userid, datastore) {
   }
 }
 
+async function SpacingNeeded(username){
+  const is = await IsEarlyAccess(username)
+  if (is) {
+    return 'none'
+  }
+  else{
+    return 'block'
+  }
+}
+
 async function IsAlpha(UserId){
   const URL = `https://inventory.roblox.com/v1/users/${UserId}/items/1/662706674/is-owned`;
   const response = await fetch(URL);
@@ -622,7 +632,7 @@ app.get("/", async (req, res) => {
                 </div>
                 <div class="card-body" style="padding: 2px">
                     <div id="status" style="margin: auto; text-align: center;">
-                                <strong>${await IsAlpha(await username_to_userid(User))}</strong><br>
+                                <strong>${await IsAlpha(await username_to_userid(User))}</strong><br display="${await SpacingNeeded(await username_to_userid(User))}">
                                 <strong id="EarlyAccess">${await IsEarlyAccess(await username_to_userid(User))}</strong>
                     </div>
                 </div>

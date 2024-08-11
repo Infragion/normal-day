@@ -632,7 +632,7 @@ app.get("/", async (req, res) => {
                 </div>
                 <div class="card-body" style="padding: 2px">
                     <div id="status" style="margin: auto; text-align: center;">
-                                <strong>${await IsAlpha(await username_to_userid(User))}</strong><br display="${await SpacingNeeded(await username_to_userid(User))}">
+                                <strong>${await IsAlpha(await username_to_userid(User))}</strong><br style="display: ${await SpacingNeeded(await username_to_userid(User))};">
                                 <strong id="EarlyAccess">${await IsEarlyAccess(await username_to_userid(User))}</strong>
                     </div>
                 </div>

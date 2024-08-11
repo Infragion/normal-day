@@ -77,13 +77,13 @@ async function SpacingNeeded(userid){
   const is = await IsEarlyAccess(userid)
   if (is == 'Early Access') {
     if (IsAlpha(userid) == 'Alpha'){
-     return 'none' 
+      return 'block'
     }
-      else {
-    return 'block'
-  }
-  }
     else {
+      return 'none'
+  }
+  }
+  else {
     return 'block'
   }
 }

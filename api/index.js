@@ -6,6 +6,7 @@ const axios = require("axios");
 const { scryptSync, randomBytes, timingSafeEqual } = require('crypto');
 const path = require("path");
 const cors = require("cors");
+require('events').EventEmitter.defaultMaxListeners = 15;
 
 const app = express();
 

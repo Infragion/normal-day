@@ -1,9 +1,11 @@
+
+
 html, body {
     background-color: 141619;
     color: white;
     font-family: "Roboto", sans-serif;
     font-weight: 500;
-    transition:all 1s;
+    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -29,15 +31,16 @@ button, input  {
 input {
     background-color: #212429;
     border: none;
+    -webkit-appearance: none;
+    outline: solid 1px#3e444d;
     padding: 5px;
 }
 
 textarea:focus, input:focus{
-    outline: none;
+    outline: solid 2px#4A6FA5;
 }
 
 button{
-    
     background-color: #4A6FA5;
     cursor: pointer;
     color: white;
@@ -46,7 +49,12 @@ button{
 }
 button:hover {
     background-color: transparent;
-    transition: background 0.4s;
     border: 2px solid #4A6FA5;
     color: #4A6FA5;
+}
+
+input:is(:-webkit-autofill, :autofill) {
+    -webkit-box-shadow: 0 0 0 100px #212429 inset !important;
+    -webkit-text-fill-color: white !important;
+    caret-color: white;
 }

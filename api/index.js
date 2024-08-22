@@ -178,9 +178,9 @@ app.get("/db", async (req, res) => {
   if (req.headers.cookie === undefined){
     res.status(200).redirect("/login"); return 0;
   }
-  const raw = req.headers.cookie.split('_');
-  const username = raw[0].toString()
-  const hash = raw[1].toString()
+  const raw = req.headers.cookie.split('.');
+  const username = hex_to_ascii(raw[0].toString())
+  const hash = raw[1].toString().concat('.', raw[2].toString())
   if (hash === await kv.get(`${username}:user`)) {
     const keys = await kv.keys("*")
     let code = "<head> <script src='/db_client.js'></script> </head> <input id='sinput' style='position: absolute; top: 1%; right: 6%;' placeholder='Username' type='text'> <button id='search' style='position: absolute; top: 1%; right: 1%;'>Search</button>"

@@ -293,9 +293,9 @@ app.get('/login', async (req, res) => {
     </div>
   </body>
   `); return 0;}
-  const raw = req.headers.cookie.split('_');
-  const username = raw[0].toString()
-  const hash = raw[1].toString()
+  const raw = req.headers.cookie.split('.');
+  const username = hex_to_ascii(raw[0].toString())
+  const hash = raw[1].toString().concat('.', raw[2].toString()).toString()
   // const { salt, hash } = shash.split(':');
   if (hash === await kv.get(`${username}:user`)) {
     res.status(200).redirect("/db");

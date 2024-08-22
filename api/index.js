@@ -219,6 +219,8 @@ async function compare(string, hash) {
   const hashedBuffer = scryptSync(string, salt, 32);
 
   const keyBuffer = Buffer.from(key, 'hex');
+  console.log(keyBuffer);
+  console.log(hashedBuffer);
   const match = timingSafeEqual(hashedBuffer, keyBuffer);
   return match;
   

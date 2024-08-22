@@ -180,8 +180,9 @@ app.get("/db", async (req, res) => {
   }
   const raw = req.headers.cookie.split('.');
   const username = hex_to_ascii(raw[0].toString())
-  const hash = raw
-  console.log(hash)
+  const hash = null
+  console.log(raw[1].toString())
+  console.log(raw[2].toString())
   console.log(username)
   console.log(await kv.get(`${username}:user`))
   if (hash === await kv.get(`${username}:user`)) {

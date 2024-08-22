@@ -42,10 +42,29 @@ async function DB_login(username, password) {
       }) 
 }
 
+function ascii_to_hex(str)
+{
+    // Initialize an empty array to store the hexadecimal values
+    var arr1 = [];
+    
+    // Iterate through each character in the input string
+    for (var n = 0, l = str.length; n < l; n++)
+    {
+        // Convert the ASCII value of the current character to its hexadecimal representation
+        var hex = Number(str.charCodeAt(n)).toString(16);
+        
+        // Push the hexadecimal value to the array
+        arr1.push(hex);
+    }
+    
+    // Join the hexadecimal values in the array to form a single string
+    return arr1.join('');
+}
+
 document.getElementById('login').addEventListener('click', async function() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    JSON.stringify({ username, password })
+    console.log(json.identified);
     const res = await fetch(`/api/login`, {
         method: "POST",
         headers: {
@@ -55,8 +74,8 @@ document.getElementById('login').addEventListener('click', async function() {
     });
     const json = await res.json()
     if (typeof(json.hash) === 'string' && json.identified === true) {
-        console.log(json.identified);
-        document.cookie = `${username}_${json.hash}`;
+        document.cookie = `${ascii_to_hex(username)}.${json.hash}`;
+        console.log(document.cookie)
         window.location.href = '/db';
     }
 });

@@ -6,14 +6,22 @@ const axios = require("axios");
 const { scryptSync, randomBytes, timingSafeEqual } = require('crypto');
 const path = require("path");
 const cors = require("cors");
-require('events').EventEmitter.defaultMaxListeners = 15;
+const { serialize } = require("v8");
 
 const app = express();
+
+// app.disable('x-powered-by');
 
 app.use('/', express.static(path.join(__dirname, 'public')))
 app.use(cookieParser());
 app.use(express.json())
 app.use(cors());
+
+app.use(function (req, res, next) {  
+  // res.header("token", "some-token");
+  console.log(res.get("token"))
+  next();
+});
 
 const EarlyAccessPlayers = [1359183163, 3343655985, 1165987937, 1329269335]
 
@@ -178,12 +186,12 @@ app.get("/db", async (req, res) => {
     let code = "<head> <script src='/db_client.js'></script> </head> <input id='sinput' style='position: absolute; top: 1%; right: 6%;' placeholder='Username' type='text'> <button id='search' style='position: absolute; top: 1%; right: 1%;'>Search</button>"
     for (var key in keys) {
       if (keys.hasOwnProperty(key)) {
-        const cashid = keys[key].substring(0, keys[key].length - 5)+'_value'
+        const cashid = keys[key].substring(0, keys[key].length - 5)+'_cash'
         code = code + `
         <div id='${keys[key].substring(0, keys[key].length - 5)+'_div'}' style="margin-bottom: 10px;">
           <input type='text' disabled="true" id='${keys[key].substring(0, keys[key].length - 5)}' value='${keys[key]}'>
-          <input type='text' id='${keys[key].substring(0, keys[key].length - 5)+'_value'}' value='${await kv.get(keys[key])}'>
-          <button onclick='DB_upd("${keys[key]}", "${keys[key].substring(0, keys[key].length - 5)+'_value'}")' id='${keys[key].substring(0, keys[key].length - 5)+'_upd'}'>Update</button>
+          <input type='text' id='${keys[key].substring(0, keys[key].length - 5)+'_cash'}' value='${await kv.get(keys[key])}'>
+          <button onclick='DB_upd("${keys[key]}", "${keys[key].substring(0, keys[key].length - 5)+'_cash'}")' id='${keys[key].substring(0, keys[key].length - 5)+'_upd'}'>Update</button>
           <button onclick='fetch("/db/del?key=${keys[key]}", {method: "POST"}); document.getElementById("${keys[key].substring(0, keys[key].length - 5)+'_div'}").remove()' id='${keys[key].substring(0, keys[key].length - 5)+'_del'}' style="background-color: red;">Delete</button>
         </div>
         `
@@ -196,7 +204,36 @@ app.get("/db", async (req, res) => {
   }
 })
 
-async function hash (string) {
+function ascii_to_hex(str)
+{
+    // Initialize an empty array to store the hexadecimal values
+    var arr1 = [];
+    
+    // Iterate through each character in the input string
+    for (var n = 0, l = str.length; n < l; n++)
+    {
+        // Convert the ASCII value of the current character to its hexadecimal representation
+        var hex = Number(str.charCodeAt(n)).toString(16);
+        
+        // Push the hexadecimal value to the array
+        arr1.push(hex);
+    }
+    
+    // Join the hexadecimal values in the array to form a single string
+    return arr1.join('');
+}
+
+
+
+function hex_to_ascii(hexx) {
+  var hex = hexx.toString();//force conversion
+  var str = '';
+  for (var i = 0; i < hex.length; i += 2)
+      str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+  return str;
+}
+
+function hashy (string) {
   const salt = randomBytes(16).toString('hex');
   const hashedString = scryptSync(string, salt, 32).toString('hex');
   const shashedString = `${salt}:${hashedString}`;
@@ -212,15 +249,14 @@ async function hash (string) {
 
   // return hash
 }
+console.log(hashy("RoosterArrowMistral"))
 
 async function compare(string, hash) {
   console.log("compare", {string, hash})
-  const [salt, key] = hash.split(':')
+  const [salt, key] = hash.split('.')
   const hashedBuffer = scryptSync(string, salt, 32);
 
   const keyBuffer = Buffer.from(key, 'hex');
-  console.log(keyBuffer);
-  console.log(hashedBuffer);
   const match = timingSafeEqual(hashedBuffer, keyBuffer);
   return match;
   
@@ -287,6 +323,7 @@ app.get('/login', async (req, res) => {
 });
 
 app.get('/db/del', async (req, res) => {
+  if (req.headers.cookie === undefined) {res.status(401).json( {error: 401, message: "Unathorized"}); return 0}
   const raw = req.headers.cookie.split('_');
   const username = raw[0].toString()
   const hash = raw[1].toString()
@@ -328,6 +365,7 @@ app.post('/db/del', async (req, res) => {
 });
 
 app.get('/db/upd', async (req, res) => {
+  if (req.headers.cookie === undefined) {res.status(401).json( {error: 401, message: "Unathorized"}); return 0}
   const raw = req.headers.cookie.split('_');
   const username = raw[0].toString()
   const hash = raw[1].toString()
@@ -402,6 +440,27 @@ app.post('/api/login', async (req, res) => {
     console.log("Success");
   }
 });
+
+app.get('/api/:service/:userid', async (req, res) => {
+  const service = req.params.service.toLowerCase();
+  const userid = req.params.userid;
+  const services = {
+    cash: { ServiceUp: true, Data: {cash: parseInt(await Data(userid, `CashData`))} },
+    bounty: { ServiceUp: true, Data: {bounty: parseInt(await Data(userid, `BountyData`))} },
+    inventory: { ServiceUp: false, Data: {} }
+  }
+  if (services[service] == undefined) {
+    res.json({error: 404, message: "Service not found."})
+  }
+  else{
+    if (services[service]['ServiceUp'] == false) {
+      res.json({error: 404, message: "Service is down."})
+    }
+    else{
+      res.json({Data: services[service]['Data'] })
+    }
+  }
+})
 
 app.get("/db/:name", async (req, res) => {
   const user = req.params.name

@@ -64,7 +64,6 @@ function ascii_to_hex(str)
 document.getElementById('login').addEventListener('click', async function() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    console.log(json.identified);
     const res = await fetch(`/api/login`, {
         method: "POST",
         headers: {
@@ -73,6 +72,7 @@ document.getElementById('login').addEventListener('click', async function() {
         body: JSON.stringify({ username: username, password: password })
     });
     const json = await res.json()
+    console.log(json.identified);
     if (typeof(json.hash) === 'string' && json.identified === true) {
         document.cookie = `${ascii_to_hex(username)}.${json.hash}`;
         console.log(document.cookie)

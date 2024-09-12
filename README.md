@@ -1,3 +1,3 @@
-<center><h1>normal day Database</h1></center>
+<center><h>normal day Database</h></center>
 ![License](https://img.shields.io/github/license/Infragion/normal-day)
 <a target="_blank" href="https://twitter.com/Infragion"><img src="https://img.shields.io/twitter/follow/Infragion"></a>

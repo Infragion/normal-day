@@ -2,4 +2,4 @@
 <a href="https://github.com/Infragion/normal-day/tree/main?tab=MIT-1-ov-file"><img src="https://img.shields.io/github/license/Infragion/normal-day"></a>
 <a href="https://twitter.com/Infragion"><img src="https://img.shields.io/twitter/follow/Infragion"></a>
 # How to get support?
-Please refer to this file <b><a href="https://github.com/Infragion/normal-day/SUPPORT.md">SUPPORT.md</a></b>
+Please refer to this file <b><a href="https://github.com/Infragion/normal-day/blob/main/SUPPORT.md">SUPPORT.md</a></b>

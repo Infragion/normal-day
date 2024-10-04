@@ -175,7 +175,7 @@ async function IsUsernameExists(User){
 }
 
 app.get("/favicon.ico", async (req, res) => {
-  res.sendFile(path.join(__dirname, 'icon.ico'))
+  res.sendFile(path.join(__dirname, 'public/icon.ico'))
 })
 
 app.get("/db", async (req, res) => {

@@ -1,6 +1,7 @@
 const express = require("express");
 const nodefetch = require("node-fetch");
 const cookieParser = require('cookie-parser');
+var favicon = require('serve-favicon')
 const { kv } =  require('@vercel/kv');
 const axios = require("axios");
 const { scryptSync, randomBytes, timingSafeEqual } = require('crypto');
@@ -13,6 +14,7 @@ const app = express();
 // app.disable('x-powered-by');
 
 app.use('/', express.static(path.join(__dirname, 'public')))
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use(cookieParser());
 app.use(express.json())
 app.use(cors());

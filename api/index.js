@@ -340,7 +340,7 @@ app.get('/db/del', async (req, res) => {
 
 app.post('/db/del', async (req, res) => {
   if (req.headers.cookie === undefined) {res.status(401).json( {error: 401, message: "Unathorized"}); return 0}
-  const raw = req.headers.cookie.split('_');
+  const raw = req.headers.cookie.split('.');
   const username = raw[0].toString()
   const hash = raw[1].toString()
 
@@ -382,7 +382,7 @@ app.get('/db/upd', async (req, res) => {
 
 app.post('/db/upd', async (req, res) => {
   if (req.headers.cookie === undefined) {res.status(401).json( {error: 401, message: "Unathorized"}); return 0}
-  const raw = req.headers.cookie.split('_');
+  const raw = req.headers.cookie.split('.');
   const username = raw[0].toString()
   const hash = raw[1].toString()
 

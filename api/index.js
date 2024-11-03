@@ -386,7 +386,7 @@ app.post('/db/upd', async (req, res) => {
   const username = raw[0].toString()
   const hash = `${raw[1].toString()}.${raw[2].toString()}`
 
-  if (hash === await kv.get(`${username}:user`)) {
+  if (hash == await kv.get(`${username}:user`)) {
     try {
       const key = req.query.key;
       const val = req.query.value;

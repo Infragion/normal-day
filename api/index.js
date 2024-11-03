@@ -386,9 +386,8 @@ app.post('/db/upd', async (req, res) => {
   const raw = req.headers.cookie.split('.');
   const username = raw[0].toString()
   const hash = `${raw[1]}.${raw[2]}`
-  console.log(`${hash.toString() === await kv.get(`${username}:user`)} - ${hash.toString()} : ${await kv.get(`${username}:user`).toString()}`)
-
-  if ( hash.toString() === await kv.get(`${username}:user`) ) {
+  const hashdb = await kv.get(`${username}:user`).then(value => {
+    if ( hash.toString() === value ) {
     try {
       const key = req.query.key;
       const val = req.query.value;
@@ -415,6 +414,7 @@ app.post('/db/upd', async (req, res) => {
   else{
     res.status(401).json( {error: 401, message: "Unathorized"} )
   }
+  })
 });
 
 app.post('/api/login', async (req, res) => {

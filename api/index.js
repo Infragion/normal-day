@@ -386,7 +386,7 @@ app.post('/db/upd', async (req, res) => {
   const raw = req.headers.cookie.split('.');
   const username = raw[0].toString()
   const hash = `${raw[1]}.${raw[2]}`
-  const hashdb = await kv.get(`${username}:user`).then(value => {
+  await kv.get(`${username}:user`).then(value => {
     if ( hash.toString() === value ) {
     try {
       const key = req.query.key;

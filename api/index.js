@@ -369,7 +369,7 @@ app.post('/db/del', async (req, res) => {
 app.get('/db/upd', async (req, res) => {
   if (req.headers.cookie === undefined) {res.status(401).json( {error: 401, message: "Unathorized"}); return 0}
   const raw = req.headers.cookie.split('_');
-  const username = raw[0].toString()
+  const username = hex_to_ascii(raw[0].toString())
   const hash = raw[1].toString()
 
   if (hash === await kv.get(`${username}:user`)) {

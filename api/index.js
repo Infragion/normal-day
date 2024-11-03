@@ -402,7 +402,7 @@ app.post('/db/upd', async (req, res) => {
         res.status(400).json( {error: 400, message: "Bad Request"} )
       }
 
-      await kv.set(key, val);
+      kv.set(key, val);
     }
     catch (error) {
       res.send(error);

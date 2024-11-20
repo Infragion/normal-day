@@ -177,9 +177,9 @@ async function IsUsernameExists(User){
 }
 
 app.get("/db", async (req, res) => {
-  if (req.headers.cookie === undefined){
-    res.status(200).redirect("/login"); return 0;
-  }
+  // if (req.headers.cookie === undefined){
+  //   res.status(200).redirect("/login"); return 0;
+  // }
   const raw = req.headers.cookie.split('.');
   const username = hex_to_ascii(raw[0].toString())
   const hash = raw[1].toString().concat('.', raw[2].toString()).toString()

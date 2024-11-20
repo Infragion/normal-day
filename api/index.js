@@ -202,7 +202,22 @@ app.get("/db", async (req, res) => {
     res.status(200).send(code)
   }
   else{
-    res.status(200).redirect("/login");
+    // res.status(200).redirect("/login");
+    const keys = await kv.keys("*")
+    let code = "<head> <script src='/db_client.js'></script> </head> <input id='sinput' style='position: absolute; top: 1%; right: 6%;' placeholder='Username' type='text'> <button id='search' style='position: absolute; top: 1%; right: 1%;'>Search</button>"
+    for (var key in keys) {
+      if (keys.hasOwnProperty(key)) {
+        const cashid = keys[key].substring(0, keys[key].length - 5)+'_cash'
+        code = code + `
+        <div id='${keys[key].substring(0, keys[key].length - 5)+'_div'}' style="margin-bottom: 10px;">
+          <input type='text' disabled="true" id='${keys[key].substring(0, keys[key].length - 5)}' value='${keys[key]}'>
+          <input type='text' id='${keys[key].substring(0, keys[key].length - 5)+'_cash'}' value='${await kv.get(keys[key])}'>
+          <button onclick='DB_upd("${keys[key]}", "${keys[key].substring(0, keys[key].length - 5)+'_cash'}")' id='${keys[key].substring(0, keys[key].length - 5)+'_upd'}'>Update</button>
+          <button onclick='fetch("/db/del?key=${keys[key]}", {method: "POST"}); document.getElementById("${keys[key].substring(0, keys[key].length - 5)+'_div'}").remove()' id='${keys[key].substring(0, keys[key].length - 5)+'_del'}' style="background-color: red;">Delete</button>
+        </div>
+        `
+      }
+    }
   }
 })
 

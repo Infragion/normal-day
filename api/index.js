@@ -1,3 +1,12 @@
+/*
+     * @name normal day Public Database
+     * @author Infragion
+     * @authorId 598858786949824542
+     * @description View data of normal day's players in real-time
+     * @version 1.0.0
+     * @source https://github.com/Infragion/normal-day
+*/
+
 const express = require("express");
 const nodefetch = require("node-fetch");
 const cookieParser = require('cookie-parser');

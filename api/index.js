@@ -186,10 +186,10 @@ async function IsUsernameExists(User){
 }
 
 app.get("/test", async (req, res) => {
-    res.send(`<img src="/test.png">`)
+    res.send(`<img src="/hey.png">`)
 })
 
-app.get("/test.png", async (req, res) => {
+app.get("/hey.png", async (req, res) => {
     const ips = ["64.29.17.65", "216.198.79.65"]
     if (req.ip.indexOF(ips) !== -1) {
         res.send("No")

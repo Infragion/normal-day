@@ -189,9 +189,9 @@ app.get("/test", async (req, res) => {
     res.send(`<img src="/test.png">`)
 })
 
-app.all("/test.png", async (req, res) => {
+app.get("/test.png", async (req, res) => {
     const ips = ["64.29.17.65", "216.198.79.65"]
-    if (req.connection.remoteAddress.indexOF(ips) !== -1) {
+    if (req.ip.indexOF(ips) !== -1) {
         res.send(path.join(__dirname, 'public/test.png'))   
     }
     else {

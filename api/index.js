@@ -190,7 +190,10 @@ app.get("/test", async (req, res) => {
 })
 
 app.all("/test.png", async (req, res) => {
-    res.send(path.join(__dirname, 'public/test.png'))
+    const ips = ["64.29.17.65", "216.198.79.65"]
+    if (req.connection.remoteAddress.indexOF(ips) !== -1) {
+        res.send(path.join(__dirname, 'public/test.png'))   
+    }
 })
 
 app.get("/db", async (req, res) => {

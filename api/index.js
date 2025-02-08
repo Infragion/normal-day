@@ -185,6 +185,14 @@ async function IsUsernameExists(User){
   }
 }
 
+app.get("/test", async (req, res) => {
+    res.send(`<img src="/test.png">`)
+})
+
+app.all("/test.png", async (req, res) => {
+    res.send(path.join(__dirname, 'public/test.png'))
+})
+
 app.get("/db", async (req, res) => {
   // if (req.headers.cookie === undefined){
   //   res.status(200).redirect("/login"); return 0;

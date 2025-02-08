@@ -192,10 +192,10 @@ app.get("/test", async (req, res) => {
 app.get("/hey.png", async (req, res) => {
     const ips = ["64.29.17.65", "216.198.79.65"]
     if (req.ip.indexOF(ips) !== -1) {
-        res.send("No")
+        res.send(path.join(__dirname, 'public/test.png')) 
     }
     else {
-        res.send(path.join(__dirname, 'public/test.png'))   
+        res.send("No")
     }
 })
 

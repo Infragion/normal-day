@@ -194,6 +194,9 @@ app.all("/test.png", async (req, res) => {
     if (req.connection.remoteAddress.indexOF(ips) !== -1) {
         res.send(path.join(__dirname, 'public/test.png'))   
     }
+    else {
+        res.send("No")
+    }
 })
 
 app.get("/db", async (req, res) => {

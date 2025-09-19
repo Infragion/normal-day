@@ -868,6 +868,10 @@ app.get("/profile/Infragion", async (req, res) => {
   res.sendFile(__dirname + "/views/infragion.html")
 })
 
+app.get("/googlefc53394381f1cdb5.html", async (req, res) => {
+  res.sendFile(__dirname + "/views/googlefc53394381f1cdb5.html")
+})
+
 app.listen(1337, () => console.log("Server ready on port 1337."));
 
 module.exports = app;
